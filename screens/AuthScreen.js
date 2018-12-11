@@ -25,7 +25,22 @@ export default class AuthScreen extends React.Component {
               alignItems: 'center',
             }}
             placeholder="user name"
-            onChangeText={(name) => this.setState({ name })}
+            onChangeText={(userName) => this.setState({ userName })}
+          />
+        </View>
+
+        <View style={{ padding: 10 }}>
+          <TextInput
+            style={{
+              height: 40,
+              fontSize: 20,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            placeholder="password"
+            secureTextEntry
+            onChangeText={(password) => this.setState({ password })}
           />
         </View>
 
@@ -36,9 +51,11 @@ export default class AuthScreen extends React.Component {
             alignItems: 'center',
           }}
           onPress={() => {
-            if (this.state.name) {
-              navigate('TaskList', { userName: this.state.name });
-            }
+            const { userName, password } =  this.state;
+
+            this._login({ name: userName, password})
+              .then(() => navigate('TaskList'))
+              .catch(() => _showError())
           }}
         >
           <View
@@ -48,6 +65,16 @@ export default class AuthScreen extends React.Component {
       </ScrollView>
     );
   }
+
+  _login = (user) => new Promise((resolve, reject) => {
+    console.log(user);
+    if (user.name === 'admin' && user.password === 'admin') {
+      return resolve()
+    }
+    return reject('Invalid User')
+  });
+
+  _showError = () => console.log('Should be implemented');
 }
 
 const styles = StyleSheet.create({
