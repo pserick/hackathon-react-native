@@ -18,17 +18,17 @@ export default class AuthScreen extends React.Component {
       <ScrollView style={styles.container}>
         {
           this.state.errorMessage ? (
-            <Text style={{ color: 'red', fontSize: 30 }} >
+            <Text style={errorMessage} >
               {this.state.errorMessage}
             </Text>
           ) : null
         }
-        <Text style={{ color: '#444444', fontSize: 25, fontWeight: 'bold', paddingBottom: 10 }}>
+        <Text style={styles.title}>
           LOGIN
         </Text>
 
         <View style={styles.inputRow}>
-          <View style={{ height: 40, width: 40, backgroundColor: 'white', marginRight: 10 }}>
+          <View style={styles.inputIconPlaceholder}>
             <Image
               style={{ width: 25, height: 20, marginTop: 10, marginLeft: 7 }}
               source={require('../assets/images/mail.png')}
@@ -37,7 +37,7 @@ export default class AuthScreen extends React.Component {
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
-              placeholder="user name"
+              placeholder="Email"
               onChangeText={(userName) => this.setState({ userName })}
               value={this.state.userName}
               autoCapitalize={'none'}
@@ -47,7 +47,7 @@ export default class AuthScreen extends React.Component {
         </View>
 
         <View style={styles.inputRow}>
-          <View style={{ height: 40, width: 40, backgroundColor: 'white', marginRight: 10 }}>
+          <View style={styles.inputIconPlaceholder}>
             <Image
               style={{ width: 20, height: 25, marginTop: 7, marginLeft: 9 }}
               source={require('../assets/images/padlock.png')}
@@ -56,7 +56,7 @@ export default class AuthScreen extends React.Component {
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
-              placeholder="password"
+              placeholder="Password"
               onChangeText={(password) => this.setState({ password })}
               value={this.state.password}
               autoCapitalize={'none'}
@@ -129,6 +129,16 @@ export default class AuthScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    color: '#444444',
+    fontSize: 25,
+    fontWeight: 'bold',
+    paddingBottom: 10,
+  },
+  errorMessage: {
+    color: 'red',
+    fontSize: 30,
+  },
   container: {
     flex: 1,
     padding: 60,
@@ -151,5 +161,11 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     marginBottom: 20,
+  },
+  inputIconPlaceholder: {
+    height: 40,
+    width: 40,
+    backgroundColor: 'white',
+    marginRight: 10,
   }
 });
