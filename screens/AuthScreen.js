@@ -13,8 +13,6 @@ export default class AuthScreen extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
-
     return (
       <ScrollView style={styles.container}>
         {
@@ -54,29 +52,25 @@ export default class AuthScreen extends React.Component {
         </View>
 
         <TouchableOpacity
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={() => {
-            const { userName, password } =  this.state;
-
-            this._login({ name: userName, password})
-              .then(() => navigate('TaskList'))
-              .catch((err) => this._showError(err.message))
-          }}
+          style={styles.button}
+          onPress={this._onPress}
         >
-          <View
-            style={styles.submitDisc}
-          />
+          <Text style={{ color: 'white' }}> login </Text>
         </TouchableOpacity>
       </ScrollView>
     );
   }
 
+  _onPress = () => {
+    const { navigate } = this.props.navigation;
+    const { userName, password } = this.state;
+
+    this._login({ name: userName, password })
+      .then(() => navigate('TaskList'))
+      .catch((err) => this._showError(err.message))
+  }
+
   _login = (user) => new Promise((resolve, reject) => {
-    console.log(user);
     if (user.name === 'admin' && user.password === 'admin') {
       return resolve()
     }
@@ -92,13 +86,12 @@ export default class AuthScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    padding: 60,
     backgroundColor: '#fff',
   },
-  submitDisc: {
-    width: 120,
-    height: 120,
-    borderRadius: 120 / 2,
-    backgroundColor: 'blue',
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#1a76d6',
+    padding: 10,
   },
 });
