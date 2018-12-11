@@ -42,7 +42,7 @@ export default class AuthScreen extends React.Component {
             secureTextEntry
           />
         </View>
-        
+
         <TouchableOpacity
           style={styles.button}
           onPress={this._onPress}
@@ -59,12 +59,17 @@ export default class AuthScreen extends React.Component {
 
     if (userName && password) {
       this._fetchToken(userName, password)
+        .then(() => {
+          if(!this.state.token) {
+            throw new Error('invalid login');
+          }
+        })
         .then(() => navigate('TaskList', { userName: this.state.name, token: this.state.token })
         )
         .catch((err) => this._showError(err.message))
     }
   }
-    
+
   _showError = (message) => {
     this.setState({ errorMessage: message});
     setTimeout(() => this.setState({ errorMessage: null }), 4500);
@@ -86,7 +91,7 @@ export default class AuthScreen extends React.Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson)
+        console.log('response:' ,responseJson)
         if(responseJson && responseJson.access_token) {
           const token = responseJson.access_token;
           this.setState({ token });
