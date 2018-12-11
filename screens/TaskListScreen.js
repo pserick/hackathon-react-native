@@ -65,7 +65,6 @@ class EntityList extends React.PureComponent {
 
 export default class TaskListScreen extends React.Component {
   componentDidMount() {
-    console.log('taskList:', this.props)
     const { navigation } = this.props;
     const token = navigation.getParam('token', 'dummy');
     const userName = navigation.getParam('userName', 'dummyName');
@@ -74,52 +73,73 @@ export default class TaskListScreen extends React.Component {
       userName,
       token,
     })
+
+    this._fetchMyTasks(token)
   }
 
   state = {
     userName: 'dummy',
     token: 'dummy',
+    isloading: true,
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>RPLAN My Tasks</Text>
-      </View>
-        <ScrollView style={styles.container}>
+    if (!this.state.isLoading && this.state.tasks) {
+      const tasks = this.state.tasks
+      console.log('tasks', this.state.tasks)
+      return (
+        <View style={styles.container} >
+          <View style={styles.headerContainer} >
+            <Text style={styles.headerText} >RPLAN My Tasks</Text >
+          </View >
+          <ScrollView style={styles.container} >
 
-          <View style={styles.listContainer}>
+            <View style={styles.listContainer} >
 
               <EntityList
-                data={[
-                  {key: 'Devin'},
-                  {key: 'Jackson'},
-                  {key: 'James'},
-                  {key: 'Joel'},
-                  {key: 'John'},
-                  {key: 'Jillian'},
-                  {key: 'Jimmy'},
-                  {key: 'Julie'},
-                  {key: 'Erick'},
-                  {key: 'Fabian'},
-                  {key: 'Holger'},
-                  {key: 'Leonardo'},
-                  {key: 'Matthias'},
-                  {key: 'Teodor'},
-                  {key: 'Lars'},
-                ]}
+                data={tasks.map(taskId => ({
+                  key: taskId
+                }))}
               />
-          </View>
-        </ScrollView>
+            </View >
+          </ScrollView >
 
-        <View style={styles.detailContainer}>
-          <MonoText style={styles.detailText}>Jackson</MonoText>
-          <MonoText style={styles.detailText}>is at work</MonoText>
-          <MonoText style={styles.detailText}>[Leave work]</MonoText>
-        </View>
-      </View>
-    );
+          <View style={styles.detailContainer} >
+            <MonoText style={styles.detailText} >Jackson</MonoText >
+            <MonoText style={styles.detailText} >is at work</MonoText >
+            <MonoText style={styles.detailText} >[Leave work]</MonoText >
+          </View >
+        </View >
+      );
+    } else {
+      return null
+    }
+  }
+
+  _fetchMyTasks(token) {
+    return fetch('http://localhost:8081/api/v2/dashboard?aspect=core',
+      {
+        method: 'GET',
+        headers: {
+          Connection: 'keep-alive',
+          Accept: 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      })
+      .then((response) => {
+        console.log('response: ', response)
+        return response.json()
+      })
+      .then((responseJson) => {
+        console.log('response:' ,responseJson)
+        const { dtoMap } = responseJson
+        const ids = Object.keys(dtoMap)
+        console.log('ids:', ids)
+        this.setState({ tasks: ids, isLoading: false })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }
 
