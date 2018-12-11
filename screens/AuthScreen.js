@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
 
 export default class AuthScreen extends React.Component {
   static navigationOptions = {
@@ -7,7 +7,9 @@ export default class AuthScreen extends React.Component {
   };
 
   state = {
-    name: '',
+    errorMessage: '',
+    userName: '',
+    password: '',
   }
 
   render() {
@@ -15,6 +17,13 @@ export default class AuthScreen extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
+        {
+          this.state.errorMessage ? (
+            <Text style={{ color: 'red', fontSize: 30 }} >
+              { this.state.errorMessage }
+            </Text>
+          ) : null
+        }
         <View style={{ padding: 10 }}>
           <TextInput
             style={{
@@ -55,7 +64,7 @@ export default class AuthScreen extends React.Component {
 
             this._login({ name: userName, password})
               .then(() => navigate('TaskList'))
-              .catch(() => _showError())
+              .catch((err) => this._showError(err.message))
           }}
         >
           <View
@@ -71,10 +80,13 @@ export default class AuthScreen extends React.Component {
     if (user.name === 'admin' && user.password === 'admin') {
       return resolve()
     }
-    return reject('Invalid User')
+    return reject(Error('Invalid User'))
   });
 
-  _showError = () => console.log('Should be implemented');
+  _showError = (message) => {
+    this.setState({ errorMessage: message});
+    setTimeout(() => this.setState({ errorMessage: null }), 4500);
+  };
 }
 
 const styles = StyleSheet.create({
