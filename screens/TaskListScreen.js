@@ -105,12 +105,6 @@ export default class TaskListScreen extends React.Component {
               />
             </View >
           </ScrollView >
-
-          <View style={styles.detailContainer} >
-            <MonoText style={styles.detailText} >Jackson</MonoText >
-            <MonoText style={styles.detailText} >is at work</MonoText >
-            <MonoText style={styles.detailText} >[Leave work]</MonoText >
-          </View >
         </View >
       );
     } else {
@@ -129,14 +123,11 @@ export default class TaskListScreen extends React.Component {
         },
       })
       .then((response) => {
-        console.log('response: ', response)
         return response.json()
       })
       .then((responseJson) => {
-        console.log('response:' ,responseJson)
         const { dtoMap } = responseJson
         const ids = Object.keys(dtoMap)
-        console.log('ids:', ids)
         this.setState({ tasks: ids, isLoading: false, dtoMap })
       })
       .catch((error) => {

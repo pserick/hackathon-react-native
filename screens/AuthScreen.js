@@ -18,7 +18,7 @@ export default class AuthScreen extends React.Component {
       <ScrollView style={styles.container}>
         {
           this.state.errorMessage ? (
-            <Text style={errorMessage} >
+            <Text style={styles.errorMessage} >
               {this.state.errorMessage}
             </Text>
           ) : null
