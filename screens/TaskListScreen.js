@@ -86,8 +86,7 @@ export default class TaskListScreen extends React.Component {
   render() {
     if (!this.state.isLoading && this.state.tasks) {
       const tasks = this.state.tasks
-        const dtoMap = this.state.dtoMap
-      console.log('tasks', this.state.tasks)
+      const dtoMap = this.state.dtoMap
       return (
         <View style={styles.container} >
           <View style={styles.headerContainer} >
@@ -100,7 +99,7 @@ export default class TaskListScreen extends React.Component {
               <EntityList
                 data={tasks.map(taskId => ({
                   key: taskId,
-                    name: dtoMap[taskId].core.name
+                  name: dtoMap[taskId].core.name
                 }))}
               />
             </View >
