@@ -32,9 +32,9 @@ class Entity extends React.PureComponent {
 }
 
 class EntityList extends React.PureComponent {
-  state = {selected: (new Map(): Map<string, boolean>)};
+  state = {selected: new Map()};
 
-  _onPressItem = (id: string) => {
+  _onPressItem = (id) => {
     this.setState((state) => {
       const selected = new Map(state.selected);
       selected.set(id, !selected.get(id)); // toggle
@@ -44,7 +44,7 @@ class EntityList extends React.PureComponent {
 
   _renderItem = ({item}) => (
     <Entity
-      value={item.key}
+      value={item.name}
       key={item.key}
       onPressItem={this._onPressItem}
       selected={!!this.state.selected.get(item.id)}
@@ -86,6 +86,7 @@ export default class TaskListScreen extends React.Component {
   render() {
     if (!this.state.isLoading && this.state.tasks) {
       const tasks = this.state.tasks
+        const dtoMap = this.state.dtoMap
       console.log('tasks', this.state.tasks)
       return (
         <View style={styles.container} >
@@ -98,7 +99,8 @@ export default class TaskListScreen extends React.Component {
 
               <EntityList
                 data={tasks.map(taskId => ({
-                  key: taskId
+                  key: taskId,
+                    name: dtoMap[taskId].core.name
                 }))}
               />
             </View >
@@ -117,7 +119,7 @@ export default class TaskListScreen extends React.Component {
   }
 
   _fetchMyTasks(token) {
-    return fetch('http://localhost:8081/api/v2/dashboard?aspect=core',
+    return fetch('https://rplan.com/api/v2/dashboard?aspect=core',
       {
         method: 'GET',
         headers: {
@@ -135,7 +137,7 @@ export default class TaskListScreen extends React.Component {
         const { dtoMap } = responseJson
         const ids = Object.keys(dtoMap)
         console.log('ids:', ids)
-        this.setState({ tasks: ids, isLoading: false })
+        this.setState({ tasks: ids, isLoading: false, dtoMap })
       })
       .catch((error) => {
         console.error(error);
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 12,
-    fontSize: 18,
+    fontSize: 12,
     height: 42,
     backgroundColor: '#F9F9FF',
     ...Platform.select({

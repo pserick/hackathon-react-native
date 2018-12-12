@@ -94,12 +94,13 @@ export default class AuthScreen extends React.Component {
   }
 
   _showError = (message) => {
+    console.log('###', message)
     this.setState({ errorMessage: message });
     setTimeout(() => this.setState({ errorMessage: null }), 4500);
   };
 
   _fetchToken(username, password) {
-    return fetch('http://localhost:8081/api/auth/token',
+    return fetch('https://rplan.com/api/auth/token',
       {
         method: 'POST',
         headers: {
